@@ -1,0 +1,12 @@
+{
+	"auths": {},
+	"credsStore": "desktop",
+	"proxies": {
+		"default": {
+			"httpProxy": "http://host.docker.internal:7890",
+			"httpsProxy": "http://host.docker.internal:7890",
+			"noProxy": "127.0.0.1,localhost,.local,.docker.internal"
+		}
+	},
+	"currentContext": "desktop-linux"
+}
