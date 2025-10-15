@@ -1,3 +1,3 @@
 #!/bin/bash
 
-sudo docker build -t pytorch:3.0 .
+sudo docker build -t sam:3.0 .
