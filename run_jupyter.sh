@@ -7,8 +7,8 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 WORKDIR="${SCRIPT_DIR}"
 
 # 新的标准命名
-CONTAINER="${CONTAINER_NAME:-pytorch_container}"
-IMAGE="${DOCKER_IMAGE:-pytorch:3.0}"
+CONTAINER="${CONTAINER_NAME:-pytorch_nightly_container}"
+IMAGE="${DOCKER_IMAGE:-pytorch_nightly:1.0}"
 PORT="${PORT:-8888}"
 TOKEN="${JUPYTER_TOKEN:-mypw}"
 
@@ -38,7 +38,7 @@ fi
 
 # 3) 组装挂载：项目目录 + 所有 /mnt/<a-z> 盘符到 /host/<盘符>
 MOUNTS=()
-MOUNTS+=("-v" "${WORKDIR}:/workspace/pytorch_container")
+MOUNTS+=("-v" "${WORKDIR}:/workspace/pytorch_nightly_container")
 HOST_ROOT="/host"
 for d in /mnt/[a-z]; do
   [ -d "$d" ] && MOUNTS+=("-v" "$d:${HOST_ROOT}/$(basename "$d")")
@@ -65,7 +65,7 @@ if ! container_exists; then
     --restart unless-stopped \
     -p "${PORT}:8888" \
     "${MOUNTS[@]}" \
-    --workdir /workspace/pytorch_container \
+    --workdir /workspace/pytorch_nightly_container \
     --shm-size=16g \
     "$IMAGE" bash -lc "
       python -c 'import jupyterlab' 2>/dev/null || pip install -U jupyterlab;

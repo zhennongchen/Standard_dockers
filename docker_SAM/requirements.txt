@@ -34,7 +34,7 @@ einops==0.6.1
 accelerate==0.20.3
 ema-pytorch==0.5.3
 pytorch-fid==0.3.0
-torch-summary==1.4.5
+#torch-summary==1.4.5
 dipy==1.9.0             # 1.7.x 不支持 Py3.10，1.9.0 可用
 lpips
 # python-gdcm==3.0.10

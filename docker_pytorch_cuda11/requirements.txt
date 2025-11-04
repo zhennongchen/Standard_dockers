@@ -19,7 +19,7 @@ einops==0.5.0
 accelerate==0.13.1
 ema-pytorch
 pytorch-fid
-torch-summary==1.4.5
+#torch-summary==1.4.5
 dipy==1.7.0
 lpips
 

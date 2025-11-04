@@ -1,0 +1,22 @@
+numpy==1.23.5
+SimpleITK==2.3.1      
+scikit-image==0.19.3
+scipy==1.10.1
+h5py==3.8.0
+matplotlib==3.7.3
+jupyterlab==3.6.7
+flake8==6.1.0 
+
+pydicom==2.3.1          # 1.4.2 太老，升一点
+nibabel==5.1.0          # 3.2.2 太老，5.x 支持 Py3.10
+nilearn==0.10.4         # 0.8.0 不支持 Py3.10
+
+pandas==1.5.3           # 1.0.3 不支持 Py3.10
+xlrd==2.0.1
+openpyxl==3.1.2
+tqdm
+opencv-python==4.8.1.78
+dipy==1.9.0
+lpips
+scikit-learn==1.2.2
+

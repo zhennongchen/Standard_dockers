@@ -1,0 +1,12 @@
+cupy-cuda12x==13.0.0
+pytorch-fid==0.3.0
+
+
+
+# 其余
+# pypng==0.20220715.0
+seaborn==0.12.2
+# sympy==1.12
+
+
+

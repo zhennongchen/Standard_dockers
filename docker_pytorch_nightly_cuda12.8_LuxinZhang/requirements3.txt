@@ -1,0 +1,5 @@
+einops==0.6.1
+accelerate==1.9.0
+ema-pytorch==0.7.0
+#torch-summary==1.4.5#make sure this one is commented out --> it will downgrade your torch version
+
