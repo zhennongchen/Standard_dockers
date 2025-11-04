@@ -1,0 +1,39 @@
+# 数值&科学计算（与 Py3.10 / Torch2.0 兼容）
+numpy==1.23.5
+scipy==1.10.1
+h5py==3.8.0
+
+# CuPy - 选 11.x 通用包，匹配 CUDA 12.8
+cupy-cuda12x==13.0.0
+
+# 其他常用
+matplotlib==3.7.3
+jupyterlab==3.6.7
+flake8==6.1.0           # 3.9.2 对 Py3.10 不稳，升到 6.x 更省心
+
+# 影像/医学影像
+SimpleITK==2.1.1.2      # 关键：2.1.1 不支持 Py3.10，2.1.1.2 开始支持
+scikit-image==0.19.3
+pydicom==2.3.1          # 1.4.2 太老，升一点
+nibabel==5.1.0          # 3.2.2 太老，5.x 支持 Py3.10
+nilearn==0.10.4         # 0.8.0 不支持 Py3.10
+
+# 数据/表格
+pandas==1.5.3           # 1.0.3 不支持 Py3.10
+xlrd==2.0.1
+openpyxl==3.1.2
+
+# 其余
+pypng==0.20220715.0
+seaborn==0.12.2
+tqdm
+sympy==1.12
+opencv-python==4.8.1.78
+scikit-learn==1.2.2
+einops==0.6.1
+accelerate==0.20.3
+ema-pytorch==0.5.3
+pytorch-fid==0.3.0
+torch-summary==1.4.5
+dipy==1.9.0             # 1.7.x 不支持 Py3.10，1.9.0 可用
+lpips

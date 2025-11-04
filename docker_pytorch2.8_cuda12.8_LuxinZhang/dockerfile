@@ -1,0 +1,56 @@
+FROM pytorch/pytorch:2.8.0-cuda12.8-cudnn9-runtime
+
+
+# 基础依赖 + 用 apt 安装 GDCM（代替 python-gdcm）
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    ca-certificates curl wget git git-lfs \
+    libgl1 libglib2.0-0 \
+    python3-gdcm \
+ && rm -rf /var/lib/apt/lists/*
+
+# get gcc
+RUN apt-get update && apt-get install -y \
+	build-essential \ 
+	cmake \
+	ninja-build \
+	gcc \
+	git \
+	g++ \
+	libglib2.0-0 \
+	libsm6 \
+	libxext6 \
+	libxrender-dev	\
+ && rm -rf /var/lib/apt/lists/*
+	
+# get pip
+RUN python3 -m pip install --upgrade pip
+
+
+# enable git
+RUN apt-get update && apt-get install git
+
+RUN pip install -U pip \
+	&& pip install --prefer-binary --no-cache-dir SimpleITK==2.3.1
+
+# 你的第三方库
+#COPY requirements.txt /env/requirements.txt
+#RUN pip install -U pip && pip install --no-cache-dir -r /env/requirements.txt
+
+COPY requirements1.txt /env/requirements1.txt
+RUN pip install -U pip && pip install --no-cache-dir -r /env/requirements1.txt
+
+COPY requirements2.txt /env/requirements2.txt
+RUN pip install -U pip && pip install --no-cache-dir -r /env/requirements2.txt
+
+COPY requirements3.txt /env/requirements3.txt
+RUN pip install -U pip && pip install --no-cache-dir -r /env/requirements3.txt
+
+
+# GitHub installations:
+RUN python3 -m pip install git+https://github.com/zhennongchen/CTProjector.git 
+
+
+WORKDIR /workspace/ct_projector
+EXPOSE 8888
+# 直接内置好 Jupyter（和你之前的一样，token 用 mypw）
+CMD ["bash","-lc","jupyter lab --allow-root --ip=0.0.0.0 --port=8888 --no-browser --NotebookApp.token=mypw --notebook-dir=/workspace/ct_projector"]
