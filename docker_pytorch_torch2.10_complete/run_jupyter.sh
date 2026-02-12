@@ -7,15 +7,38 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 WORKDIR="${SCRIPT_DIR}"
 
 # 新的标准命名
-CONTAINER="${CONTAINER_NAME:-sam_container}"
-IMAGE="${DOCKER_IMAGE:-sam:3.0}"
+CONTAINER="${CONTAINER_NAME:-pytorch_container}"
+IMAGE="${DOCKER_IMAGE:-pytorch_complete:1.0}"
 PORT="${PORT:-8888}"
 TOKEN="${JUPYTER_TOKEN:-mypw}"
 
+# 兼容旧命名（用于自动迁移）
+OLD_IMAGE="${OLD_IMAGE_NAME:-ct_projector:2.0}"
+OLD_CONTAINER="${OLD_CONTAINER_NAME:-ct_jupyter}"
 
-#  组装挂载：项目目录 + 所有 /mnt/<a-z> 盘符到 /host/<盘符>
+cd "$WORKDIR"
+
+# 1) 若本地没有新镜像但有旧镜像 -> 自动重打标签为新名
+if ! docker image inspect "$IMAGE" >/dev/null 2>&1; then
+  if docker image inspect "$OLD_IMAGE" >/dev/null 2>&1; then
+    echo "[i] Tagging old image: ${OLD_IMAGE}  ->  ${IMAGE}"
+    docker tag "$OLD_IMAGE" "$IMAGE"
+  fi
+fi
+
+# 2) 若新容器不存在但旧容器存在 -> 自动重命名容器
+if ! docker ps -a --format '{{.Names}}' | grep -qx "$CONTAINER"; then
+  if docker ps -a --format '{{.Names}}' | grep -qx "$OLD_CONTAINER"; then
+    echo "[i] Renaming container: ${OLD_CONTAINER}  ->  ${CONTAINER}"
+    # 停止旧容器（rename 运行中一般也能成功，为稳妥先停）
+    docker stop "$OLD_CONTAINER" >/dev/null 2>&1 || true
+    docker rename "$OLD_CONTAINER" "$CONTAINER"
+  fi
+fi
+
+# 3) 组装挂载：项目目录 + 所有 /mnt/<a-z> 盘符到 /host/<盘符>
 MOUNTS=()
-MOUNTS+=("-v" "${WORKDIR}:/workspace/sam_container")
+MOUNTS+=("-v" "${WORKDIR}:/workspace/pytorch_container")
 HOST_ROOT="/host"
 for d in /mnt/[a-z]; do
   [ -d "$d" ] && MOUNTS+=("-v" "$d:${HOST_ROOT}/$(basename "$d")")
@@ -42,7 +65,7 @@ if ! container_exists; then
     --restart unless-stopped \
     -p "${PORT}:8888" \
     "${MOUNTS[@]}" \
-    --workdir /workspace/sam_container \
+    --workdir /workspace/pytorch_container \
     --shm-size=16g \
     "$IMAGE" bash -lc "
       python -c 'import jupyterlab' 2>/dev/null || pip install -U jupyterlab;
@@ -58,7 +81,7 @@ fi
 
 echo
 echo "Open:   http://localhost:${PORT}/?token=${TOKEN}"
-echo "Host drives under: ${HOST_ROOT}/c, ${HOST_ROOT}/d, ..."
+echo "Host drives under: ${HOST_ROOT}/c, ${HOST_ROOT}/d, ${HOST_ROOT}/e,..."
 echo "Logs:   docker logs -f ${CONTAINER}"
 echo "GPU:    docker exec -it ${CONTAINER} nvidia-smi"
 
