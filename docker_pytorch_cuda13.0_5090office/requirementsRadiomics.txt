@@ -1,0 +1,4 @@
+
+# radiomics
+pyradiomics==3.0.1
+

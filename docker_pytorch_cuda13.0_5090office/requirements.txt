@@ -24,7 +24,7 @@ xlrd==2.0.1
 openpyxl==3.1.2
 
 # radiomics
-pyradiomics==3.0.1
+# pyradiomics==3.0.1
 
 
 

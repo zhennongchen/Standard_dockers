@@ -45,11 +45,30 @@ RUN pip3 install torch torchvision --index-url https://download.pytorch.org/whl/
 COPY requirements.txt /env/requirements.txt
 RUN pip install -U pip && pip install --no-cache-dir -r /env/requirements.txt
 
+COPY requirements.txt /env/requirementsRadiomics.txt
+RUN pip install -U pip && pip install --no-cache-dir -r /env/requirementsRadiomics.txt
+
 COPY requirementsSAM.txt /env/requirementsSAM.txt
 RUN pip install -U pip && pip install --no-cache-dir -r /env/requirementsSAM.txt
 
 # GitHub installations:
 RUN python3 -m pip install git+https://github.com/zhennongchen/CTProjector.git 
+
+# 上面某个步骤好像会覆盖掉之前下载的pytorch（降版本），所以我们重新下载一个
+RUN python3 -m pip uninstall -y torch torchvision nvidia-nccl-cu12 || true
+
+# 2) 安装稳定版 cu130
+RUN python3 -m pip install --no-cache-dir \
+    torch==2.11.0+cu130 \
+    torchvision==0.26.0+cu130 \
+    --index-url https://download.pytorch.org/whl/cu130
+
+# 3) 强制重装 NCCL cu13，修复可能的符号冲突/库缺失
+RUN python3 -m pip install --no-cache-dir --force-reinstall \
+    nvidia-nccl-cu13==2.28.9 \
+    --index-url https://download.pytorch.org/whl/cu130
+
+
 
 
 WORKDIR /workspace/ct_projector
