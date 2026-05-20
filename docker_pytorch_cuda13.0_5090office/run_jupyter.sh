@@ -8,7 +8,7 @@ WORKDIR="${SCRIPT_DIR}"
 
 # 新的标准命名
 CONTAINER="${CONTAINER_NAME:-pytorch_cuda130_container}"
-IMAGE="${DOCKER_IMAGE:-pytorch_cuda130:1.0}"
+IMAGE="${DOCKER_IMAGE:-pytorch_cuda13.0:2.0}"
 PORT="${PORT:-8888}"
 TOKEN="${JUPYTER_TOKEN:-mypw}"
 
